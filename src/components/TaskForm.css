@@ -1,0 +1,31 @@
+.task-form {
+  margin-bottom: 20px;
+}
+
+.task-form input[type="text"] {
+  padding: 10px;
+  margin-right: 10px;
+  width: 200px;
+  border-radius: 8px;
+}
+
+.task-form input[type="text"]:focus {
+  outline: none;
+}
+
+.task-form label {
+  margin-right: 10px;
+}
+
+.task-form button {
+  padding: 10px 20px;
+}
+
+::placeholder {
+  color: inherit;
+  opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder { /* Edge 12-18 */
+  color: inherit;
+}
