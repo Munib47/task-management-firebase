@@ -3,25 +3,22 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
+  useRef,
 } from "react";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import Filter from "./components/Filter";
 import "./App.css";
 
-const toCamelCase = (str) => {
-  return str
-    .toLowerCase()
-    .replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) =>
-      index === 0 ? match.toLowerCase() : match.toUpperCase()
-    )
-    .replace(/\s+/g, '');
+const generateRandomId = () => {
+  return Math.floor(1000 + Math.random() * 9000);
 };
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState("all");
   const [darkMode, setDarkMode] = useState(false);
+  const idRef = useRef(1);
 
   // Load tasks and dark mode state from local storage when the component mounts
   useEffect(() => {
@@ -37,11 +34,6 @@ const App = () => {
     }
   }, []);
 
-  // Save tasks to local storage whenever they change
-  useEffect(() => {
-    // localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
   // Save dark mode state to local storage whenever it changes
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
@@ -54,14 +46,21 @@ const App = () => {
 
   const addTask = useCallback((task) => {
     setTasks((prevTasks) => {
-      const newTasks = [
-        ...prevTasks,
-        { id: toCamelCase(task.description), ...task }
-      ];
+      const taskExists = prevTasks.some(
+        (t) => t.description.toLowerCase() === task.description.toLowerCase()
+      );
+      if (taskExists) {
+        alert("Task already added!");
+        return prevTasks; // No need to update state if task already exists
+      }
+  
+      const newTask = { id: generateRandomId(), ...task };
+      const newTasks = [...prevTasks, newTask];
       localStorage.setItem("tasks", JSON.stringify(newTasks));
       return newTasks;
     });
   }, []);
+  
 
   const editTask = useCallback((id, updatedTask) => {
     setTasks((prevTasks) => {

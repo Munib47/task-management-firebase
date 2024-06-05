@@ -5,14 +5,18 @@ import "./TaskList.css";
 const TaskList = ({ tasks, editTask, deleteTask }) => {
   return (
     <div className="task-list">
-      {tasks.map((task) => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          editTask={editTask}
-          deleteTask={deleteTask}
-        />
-      ))}
+      {tasks && tasks.length > 0 ? (
+        tasks.map((task) => (
+          <TaskItem
+            key={task.id}
+            task={task}
+            editTask={editTask}
+            deleteTask={deleteTask}
+          />
+        ))
+      ) : (
+        <p>No tasks available</p>
+      )}
     </div>
   );
 };
